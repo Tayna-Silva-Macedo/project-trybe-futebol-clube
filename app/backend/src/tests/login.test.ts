@@ -49,4 +49,23 @@ describe('Testes da rota /login', () => {
       });
     });
   });
+
+  describe('Verifica se não é possível fazer login com o campo de senha vazio', () => {
+    before(async () => {
+      chaiHttpResponse = await chai.request(app).post('/login').send({
+        email: 'admin@admin.com',
+        password: '',
+      });
+    });
+
+    it('retorna status 400', () => {
+      expect(chaiHttpResponse.status).to.be.equal(400);
+    });
+
+    it('retorna uma mensagem', () => {
+      expect(chaiHttpResponse.body).to.be.deep.equal({
+        message: 'All fields must be filled',
+      });
+    });
+  });
 });
