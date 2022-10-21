@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import UsersService from '../services/UsersService';
 
 export default class UsersController {
@@ -11,6 +12,6 @@ export default class UsersController {
   public login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const result = await this.usersService.login(email, password);
-    res.status(200).json({ token: result });
+    res.status(StatusCodes.OK).json({ token: result });
   };
 }
