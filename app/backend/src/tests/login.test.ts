@@ -68,4 +68,23 @@ describe('Testes da rota /login', () => {
       });
     });
   });
+
+  describe('Verifica se não é possível fazer login para um usuário que não existe', () => {
+    before(async () => {
+      chaiHttpResponse = await chai.request(app).post('/login').send({
+        email: 'teste@teste.com',
+        password: 'secret_admin',
+      });
+    });
+
+    it('retorna status 401', () => {
+      expect(chaiHttpResponse.status).to.be.equal(401);
+    });
+
+    it('retorna uma mensagem', () => {
+      expect(chaiHttpResponse.body).to.be.deep.equal({
+        message: 'Incorrect email or password',
+      });
+    });
+  });
 });
