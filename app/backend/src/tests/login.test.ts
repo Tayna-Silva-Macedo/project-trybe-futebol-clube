@@ -6,104 +6,168 @@ import chaiHttp = require('chai-http');
 import { app } from '../app';
 
 import { Response } from 'superagent';
+import Users from '../database/models/Users';
+
+import { findOneMock } from './mocks/login.mock';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
 describe('Testes da rota /login', () => {
-  let chaiHttpResponse: Response;
+  describe('Verifica se é possível fazer login com sucesso', async () => {
+    let response: Response;
 
-  describe('Verifica se é possível fazer login com sucesso', () => {
     before(async () => {
-      chaiHttpResponse = await chai.request(app).post('/login').send({
+      sinon.stub(Users, 'findOne').resolves(findOneMock as Users);
+
+      response = await chai.request(app).post('/login').send({
         email: 'admin@admin.com',
         password: 'secret_admin',
       });
     });
 
+    after(() => {
+      sinon.restore();
+    });
+
     it('retorna status 200', () => {
-      expect(chaiHttpResponse.status).to.be.equal(200);
+      expect(response.status).to.be.equal(200);
     });
 
     it('retorna um token', () => {
-      expect(chaiHttpResponse.body).to.have.property('token');
+      expect(response.body).to.have.property('token');
     });
   });
 
   describe('Verifica se não é possível fazer login com o campo de email vazio', () => {
+    let response: Response;
+
     before(async () => {
-      chaiHttpResponse = await chai.request(app).post('/login').send({
+      response = await chai.request(app).post('/login').send({
         email: '',
         password: 'secret_admin',
       });
     });
 
     it('retorna status 400', () => {
-      expect(chaiHttpResponse.status).to.be.equal(400);
+      expect(response.status).to.be.equal(400);
     });
 
     it('retorna uma mensagem', () => {
-      expect(chaiHttpResponse.body).to.be.deep.equal({
+      expect(response.body).to.be.deep.equal({
         message: 'All fields must be filled',
       });
     });
   });
 
   describe('Verifica se não é possível fazer login com o campo de senha vazio', () => {
+    let response: Response;
+
     before(async () => {
-      chaiHttpResponse = await chai.request(app).post('/login').send({
+      response = await chai.request(app).post('/login').send({
         email: 'admin@admin.com',
         password: '',
       });
     });
 
     it('retorna status 400', () => {
-      expect(chaiHttpResponse.status).to.be.equal(400);
+      expect(response.status).to.be.equal(400);
     });
 
     it('retorna uma mensagem', () => {
-      expect(chaiHttpResponse.body).to.be.deep.equal({
+      expect(response.body).to.be.deep.equal({
         message: 'All fields must be filled',
       });
     });
   });
 
   describe('Verifica se não é possível fazer login para um usuário que não existe', () => {
+    let response: Response;
+
     before(async () => {
-      chaiHttpResponse = await chai.request(app).post('/login').send({
+      sinon.stub(Users, 'findOne').resolves(null);
+
+      response = await chai.request(app).post('/login').send({
         email: 'teste@teste.com',
         password: 'secret_admin',
       });
     });
 
+    after(() => {
+      sinon.restore();
+    });
+
     it('retorna status 401', () => {
-      expect(chaiHttpResponse.status).to.be.equal(401);
+      expect(response.status).to.be.equal(401);
     });
 
     it('retorna uma mensagem', () => {
-      expect(chaiHttpResponse.body).to.be.deep.equal({
+      expect(response.body).to.be.deep.equal({
         message: 'Incorrect email or password',
       });
     });
   });
 
   describe('Verifica se não é possível fazer login quando a senha está incorreta', () => {
+    let response: Response;
+
     before(async () => {
-      chaiHttpResponse = await chai.request(app).post('/login').send({
+      sinon.stub(Users, 'findOne').resolves(findOneMock as Users);
+
+      response = await chai.request(app).post('/login').send({
         email: 'admin@admin.com',
         password: 'secret',
       });
     });
 
+    after(() => {
+      sinon.restore();
+    });
+
     it('retorna status 401', () => {
-      expect(chaiHttpResponse.status).to.be.equal(401);
+      expect(response.status).to.be.equal(401);
     });
 
     it('retorna uma mensagem', () => {
-      expect(chaiHttpResponse.body).to.be.deep.equal({
+      expect(response.body).to.be.deep.equal({
         message: 'Incorrect email or password',
       });
+    });
+  });
+});
+
+describe('Testes da rota /login/validate', () => {
+  describe('Verifica se ao fazer login com sucesso é retornada a função do usuário', async () => {
+    let loginResponse: Response;
+    let validateResponse: Response;
+
+    before(async () => {
+      sinon.stub(Users, 'findOne').resolves(findOneMock as Users);
+
+      loginResponse = await chai.request(app).post('/login').send({
+        email: 'admin@admin.com',
+        password: 'secret_admin',
+      });
+
+      const token = loginResponse.body.token;
+
+      validateResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .set('authorization', token);
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 200', () => {
+      expect(validateResponse.status).to.be.equal(200);
+    });
+
+    it('retorna um token', () => {
+      expect(validateResponse.body).to.be.deep.equal({ role: 'admin' });
     });
   });
 });
