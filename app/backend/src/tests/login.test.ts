@@ -87,4 +87,23 @@ describe('Testes da rota /login', () => {
       });
     });
   });
+
+  describe('Verifica se não é possível fazer login quando a senha está incorreta', () => {
+    before(async () => {
+      chaiHttpResponse = await chai.request(app).post('/login').send({
+        email: 'admin@admin.com',
+        password: 'secret',
+      });
+    });
+
+    it('retorna status 401', () => {
+      expect(chaiHttpResponse.status).to.be.equal(401);
+    });
+
+    it('retorna uma mensagem', () => {
+      expect(chaiHttpResponse.body).to.be.deep.equal({
+        message: 'Incorrect email or password',
+      });
+    });
+  });
 });
