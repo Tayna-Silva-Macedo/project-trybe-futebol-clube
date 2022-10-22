@@ -166,7 +166,7 @@ describe('Testes da rota /login/validate', () => {
       expect(validateResponse.status).to.be.equal(200);
     });
 
-    it('retorna um token', () => {
+    it('retorna a função do usuário', () => {
       expect(validateResponse.body).to.be.deep.equal({ role: 'admin' });
     });
   });
