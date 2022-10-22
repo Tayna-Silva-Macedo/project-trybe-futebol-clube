@@ -17,18 +17,17 @@ export default class UsersService {
   ): Promise<string | undefined> {
     const result = await this.usersModel.findOne(email);
 
-    if (result) {
-      const isPasswordCorrect = Bcrypt.compare(password, result.password);
-
-      if (isPasswordCorrect) {
-        const token = Token.create({ id: result.id });
-        return token;
-      }
-    } else {
-      throw new HttpException(
-        StatusCodes.UNAUTHORIZED,
-        'Incorrect email or password',
-      );
+    if (!result) {
+      throw new HttpException(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
     }
+
+    const isPasswordCorrect = Bcrypt.compare(password, result.password);
+
+    if (!isPasswordCorrect) {
+      throw new HttpException(StatusCodes.UNAUTHORIZED, 'Incorrect email or password');
+    }
+
+    const token = Token.create({ id: result.id });
+    return token;
   }
 }
