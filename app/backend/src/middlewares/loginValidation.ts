@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import HttpException from '../helpers/HttpExpection';
+import HttpException from '../helpers/HttpException';
 
 const loginValidation = (req: Request, _res: Response, next: NextFunction) => {
   const { email, password } = req.body;

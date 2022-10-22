@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import Token from '../helpers/Token';
-import HttpException from '../helpers/HttpExpection';
+import HttpException from '../helpers/HttpException';
 
 const auth = (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;

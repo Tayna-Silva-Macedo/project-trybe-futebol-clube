@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import HttpException from '../helpers/HttpExpection';
+import HttpException from '../helpers/HttpException';
 import Token from '../helpers/Token';
 import Bcrypt from '../helpers/Bcryptjs';
 // import UsersModel from '../models/UsersModel';
