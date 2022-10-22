@@ -40,12 +40,11 @@ describe('Testes da rota /login', () => {
     });
   });
 
-  describe('Verifica se não é possível fazer login com o campo de email vazio', () => {
+  describe('Verifica se não é possível fazer login sem o campo de email', () => {
     let response: Response;
 
     before(async () => {
       response = await chai.request(app).post('/login').send({
-        email: '',
         password: 'secret_admin',
       });
     });
@@ -61,13 +60,12 @@ describe('Testes da rota /login', () => {
     });
   });
 
-  describe('Verifica se não é possível fazer login com o campo de senha vazio', () => {
+  describe('Verifica se não é possível fazer login sem o campo de senha', () => {
     let response: Response;
 
     before(async () => {
       response = await chai.request(app).post('/login').send({
         email: 'admin@admin.com',
-        password: '',
       });
     });
 

@@ -4,7 +4,7 @@ import HttpException from '../helpers/HttpException';
 const loginValidation = (req: Request, _res: Response, next: NextFunction) => {
   const { email, password } = req.body;
 
-  if (email.length === 0 || password.length === 0) {
+  if (!email || !password) {
     throw new HttpException(400, 'All fields must be filled');
   }
 
