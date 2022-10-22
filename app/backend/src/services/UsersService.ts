@@ -1,24 +1,24 @@
 import { StatusCodes } from 'http-status-codes';
+
+import IUserService from '../interfaces/IUserService';
+import IUser from '../interfaces/IUser';
+
 import HttpException from '../helpers/HttpException';
 import Token from '../helpers/Token';
 import Bcrypt from '../helpers/Bcryptjs';
-// import UsersModel from '../models/UsersModel';
-import Users from '../database/models/Users';
-import IUser from '../interfaces/IUser';
 
-export default class UsersService {
-  public usersModel = Users;
+import Users from '../database/models/Users';
+
+export default class UsersService implements IUserService {
+  constructor(private model: typeof Users) {}
 
   public async findByEmail(email: string): Promise<IUser | null> {
-    const result = await this.usersModel.findOne({ where: { email } });
+    const result = await this.model.findOne({ where: { email } });
 
     return result;
   }
 
-  public async login(
-    email: string,
-    password: string,
-  ): Promise<string | undefined> {
+  public async login(email: string, password: string): Promise<string> {
     const result = await this.findByEmail(email);
 
     if (!result || !Bcrypt.compare(password, result.password)) {
@@ -36,6 +36,7 @@ export default class UsersService {
     };
 
     const token = Token.create(payload);
+
     return token;
   }
 }
