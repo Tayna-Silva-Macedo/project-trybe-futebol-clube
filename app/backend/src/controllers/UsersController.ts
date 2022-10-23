@@ -9,12 +9,12 @@ export default class UsersController {
   public login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    const result = await this.service.login(email, password);
+    const token = await this.service.login(email, password);
 
-    return res.status(StatusCodes.OK).json({ token: result });
+    return res.status(StatusCodes.OK).json({ token });
   };
 
-  public getRole = async (req: Request, res: Response) => {
+  public getRole = async (_req: Request, res: Response) => {
     const { role } = res.locals;
 
     return res.status(200).json({ role });

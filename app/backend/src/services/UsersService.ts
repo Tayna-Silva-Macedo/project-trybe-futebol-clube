@@ -13,15 +13,15 @@ export default class UsersService implements IUserService {
   constructor(private model: typeof Users) {}
 
   public async findByEmail(email: string): Promise<IUser | null> {
-    const result = await this.model.findOne({ where: { email } });
+    const user = await this.model.findOne({ where: { email } });
 
-    return result;
+    return user;
   }
 
   public async login(email: string, password: string): Promise<string> {
-    const result = await this.findByEmail(email);
+    const user = await this.findByEmail(email);
 
-    if (!result || !Bcrypt.compare(password, result.password)) {
+    if (!user || !Bcrypt.compare(password, user.password)) {
       throw new HttpException(
         StatusCodes.UNAUTHORIZED,
         'Incorrect email or password',
@@ -29,10 +29,10 @@ export default class UsersService implements IUserService {
     }
 
     const payload = {
-      id: result.id,
-      username: result.username,
-      role: result.role,
-      email: result.email,
+      id: user.id,
+      username: user.username,
+      role: user.role,
+      email: user.email,
     };
 
     const token = Token.create(payload);
