@@ -58,4 +58,26 @@ describe('Testes da rota /teams', () => {
       expect(response.body).to.be.deep.equal(findByIdMock);
     });
   });
+
+  describe('Verifica se é retornado um erro ao buscar por um id que não existe', () => {
+    let response: Response;
+
+    before(async () => {
+      sinon.stub(Teams, 'findByPk').resolves(null);
+
+      response = await chai.request(app).get('/teams/100');
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 404', () => {
+      expect(response.status).to.be.equal(404);
+    });
+
+    it('retorna o time de id 4', () => {
+      expect(response.body).to.be.deep.equal({ message: 'Team not found' });
+    });
+  });
 });
