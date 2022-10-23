@@ -168,4 +168,26 @@ describe('Testes da rota /login/validate', () => {
       expect(validateResponse.body).to.be.deep.equal({ role: 'admin' });
     });
   });
+
+  describe('Verifica se é retornado um erro ao tentar acessar a rota sem token', async () => {
+    let validateResponse: Response;
+
+    before(async () => {
+      validateResponse = await chai
+        .request(app)
+        .get('/login/validate')
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 401', () => {
+      expect(validateResponse.status).to.be.equal(401);
+    });
+
+    it('retorna uma mensagem', () => {
+      expect(validateResponse.body).to.be.deep.equal({ message: 'Token not found' });
+    });
+  });
 });
