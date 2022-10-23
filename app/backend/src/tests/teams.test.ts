@@ -36,4 +36,26 @@ describe('Testes da rota /teams', () => {
       expect(response.body).to.be.deep.equal(findAllMock);
     });
   });
+
+  describe('Verifica se um time é retornado corretamente pelo seu id', () => {
+    let response: Response;
+
+    before(async () => {
+      sinon.stub(Teams, 'findByPk').resolves(findByIdMock as Teams);
+
+      response = await chai.request(app).get('/teams/4');
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 200', () => {
+      expect(response.status).to.be.equal(200);
+    });
+
+    it('retorna o time de id 4', () => {
+      expect(response.body).to.be.deep.equal(findByIdMock);
+    });
+  });
 });
