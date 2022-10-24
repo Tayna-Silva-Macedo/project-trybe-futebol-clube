@@ -14,6 +14,8 @@ import {
   findAllFinishedMock,
   createdMatchMock,
 } from './mocks/matches.mock';
+import { findByIdMock } from './mocks/teams.mock';
+import Teams from '../database/models/Teams';
 
 chai.use(chaiHttp);
 
@@ -160,6 +162,36 @@ describe('Testes da rota /matches', () => {
     it('retorna uma mensagem', () => {
       expect(response.body).to.be.deep.equal({
         message: 'It is not possible to create a match with two equal teams',
+      });
+    });
+  });
+
+  describe('Verifica se não é possível inserir uma partida para um time que não existe no banco de dados', () => {
+    let response: Response;
+
+    before(async () => {
+      sinon.stub(Teams, 'findByPk').onFirstCall().resolves(findByIdMock as Teams);
+      sinon.stub(Teams, 'findByPk').onSecondCall().resolves(null);
+
+      response = await chai.request(app).post('/matches').send({
+        homeTeam: 4,
+        awayTeam: 99999,
+        homeTeamGoals: 2,
+        awayTeamGoals: 2,
+      });
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 404', () => {
+      expect(response.status).to.be.equal(404);
+    });
+
+    it('retorna uma mensagem', () => {
+      expect(response.body).to.be.deep.equal({
+        message: 'There is no teams with such id!',
       });
     });
   });
