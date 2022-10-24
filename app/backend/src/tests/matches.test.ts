@@ -136,4 +136,31 @@ describe('Testes da rota /matches', () => {
       expect(response.body).to.be.deep.equal({ message: 'Finished' });
     });
   });
+
+  describe('Verifica se não é possível inserir uma partida com times iguais', () => {
+    let response: Response;
+
+    before(async () => {
+      response = await chai.request(app).post('/matches').send({
+        homeTeam: 16,
+        awayTeam: 16,
+        homeTeamGoals: 2,
+        awayTeamGoals: 2,
+      });
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 422', () => {
+      expect(response.status).to.be.equal(200);
+    });
+
+    it('retorna uma mensagem', () => {
+      expect(response.body).to.be.deep.equal({
+        message: 'It is not possible to create a match with two equal teams',
+      });
+    });
+  });
 });
