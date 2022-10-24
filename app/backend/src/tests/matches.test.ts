@@ -91,17 +91,29 @@ describe('Testes da rota /matches', () => {
   });
 
   describe('Verifica se é possível salvar uma partida com o status de inProgress como true', () => {
+    let loginResponse: Response;
     let response: Response;
 
     before(async () => {
       sinon.stub(Matches, 'create').resolves(createdMatchMock as Matches);
 
-      response = await chai.request(app).post('/matches').send({
-        homeTeam: 16,
-        awayTeam: 8,
-        homeTeamGoals: 2,
-        awayTeamGoals: 2,
+      loginResponse = await chai.request(app).post('/login').send({
+        email: 'admin@admin.com',
+        password: 'secret_admin',
       });
+
+      const token = loginResponse.body.token;
+
+      response = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          homeTeam: 16,
+          awayTeam: 8,
+          homeTeamGoals: 2,
+          awayTeamGoals: 2,
+        })
+        .set('authorization', token);
     });
 
     after(() => {
@@ -140,15 +152,27 @@ describe('Testes da rota /matches', () => {
   });
 
   describe('Verifica se não é possível inserir uma partida com times iguais', () => {
+    let loginResponse: Response;
     let response: Response;
 
     before(async () => {
-      response = await chai.request(app).post('/matches').send({
-        homeTeam: 16,
-        awayTeam: 16,
-        homeTeamGoals: 2,
-        awayTeamGoals: 2,
+      loginResponse = await chai.request(app).post('/login').send({
+        email: 'admin@admin.com',
+        password: 'secret_admin',
       });
+
+      const token = loginResponse.body.token;
+
+      response = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          homeTeam: 16,
+          awayTeam: 16,
+          homeTeamGoals: 2,
+          awayTeamGoals: 2,
+        })
+        .set('authorization', token);
     });
 
     after(() => {
@@ -167,6 +191,7 @@ describe('Testes da rota /matches', () => {
   });
 
   describe('Verifica se não é possível inserir uma partida para um time que não existe no banco de dados', () => {
+    let loginResponse: Response;
     let response: Response;
 
     before(async () => {
@@ -177,12 +202,23 @@ describe('Testes da rota /matches', () => {
         .onSecondCall()
         .resolves(null);
 
-      response = await chai.request(app).post('/matches').send({
-        homeTeam: 4,
-        awayTeam: 99999,
-        homeTeamGoals: 2,
-        awayTeamGoals: 2,
+      loginResponse = await chai.request(app).post('/login').send({
+        email: 'admin@admin.com',
+        password: 'secret_admin',
       });
+
+      const token = loginResponse.body.token;
+
+      response = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          homeTeam: 4,
+          awayTeam: 99999,
+          homeTeamGoals: 2,
+          awayTeamGoals: 2,
+        })
+        .set('authorization', token);
     });
 
     after(() => {
