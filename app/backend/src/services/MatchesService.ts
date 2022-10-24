@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
 import IMatchService from '../interfaces/IMatchService';
+import IMatch from '../interfaces/IMatch';
 
 import HttpException from '../helpers/HttpException';
 
@@ -45,7 +46,7 @@ export default class MatchesService implements IMatchService {
     }
   }
 
-  private async verifyExistTeams(teamId: number): Promise<void> {
+  private async verifyExistTeam(teamId: number): Promise<void> {
     const team = await this.teamsModel.findByPk(teamId);
     if (!team) {
       throw new HttpException(
@@ -60,8 +61,8 @@ export default class MatchesService implements IMatchService {
   ): Promise<Matches> {
     MatchesService.verifyEqualTeams(match.homeTeam, match.awayTeam);
 
-    await this.verifyExistTeams(match.homeTeam);
-    await this.verifyExistTeams(match.awayTeam);
+    await this.verifyExistTeam(match.homeTeam);
+    await this.verifyExistTeam(match.awayTeam);
 
     const matchCreated = await this.model.create({
       ...match,
@@ -71,7 +72,16 @@ export default class MatchesService implements IMatchService {
     return matchCreated;
   }
 
-  public async update(id: number): Promise<void> {
+  public async updateProgress(id: number): Promise<void> {
     await this.model.update({ inProgress: false }, { where: { id } });
+  }
+
+  public async updateGoals(id: number, goals: IMatch): Promise<void> {
+    const { homeTeamGoals, awayTeamGoals } = goals;
+
+    await this.model.update(
+      { homeTeamGoals, awayTeamGoals },
+      { where: { id } },
+    );
   }
 }

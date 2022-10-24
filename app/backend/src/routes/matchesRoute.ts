@@ -16,6 +16,7 @@ router.get('/', matchesController.findAll);
 
 router.post('/', auth, matchesController.create);
 
-router.patch('/:id/finish', matchesController.update);
+router.patch('/:id/finish', matchesController.updateProgress);
+router.patch('/:id', matchesController.updateGoals);
 
 export default router;
