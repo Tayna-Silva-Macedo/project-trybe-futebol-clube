@@ -266,4 +266,31 @@ describe('Testes da rota /matches', () => {
       });
     });
   });
+
+  describe('Verifica se é possível atualizar uma partida em andamento', () => {
+    let response: Response;
+
+    before(async () => {
+      sinon.stub(Matches, 'update').resolves();
+
+      response = await chai.request(app).patch('/matches/45').send({
+        homeTeamGoals: 3,
+        awayTeamGoals: 1,
+      });
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 200', () => {
+      expect(response.status).to.be.equal(200);
+    });
+
+    it('retorna uma mensagem', () => {
+      expect(response.body).to.be.deep.equal({
+        message: 'Match updated!',
+      });
+    });
+  });
 });
