@@ -31,6 +31,7 @@ class App {
 
     this.app.use('/login', routers.login);
     this.app.use('/teams', routers.teams);
+    this.app.use('/matches', routers.matches);
 
     this.app.use(errorMiddleware);
   }
