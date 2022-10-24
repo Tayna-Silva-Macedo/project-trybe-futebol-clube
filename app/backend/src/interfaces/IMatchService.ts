@@ -1,10 +1,11 @@
-import Matches from '../database/models/Matches';
-import IMatchGoals from './IMatch';
+import IMatch from './IMatch';
+import IMatchCreate from './IMatchCreate';
+import IMatchGoals from './IMatchGoals';
 
 export default interface IMatchService {
-  findAll(): Promise<Matches[]>;
-  findAllByProgress(inProgress: boolean): Promise<Matches[]>;
-  create(match: Omit<Matches, 'id' | 'inProgress'>): Promise<Matches>;
+  findAll(): Promise<IMatch[]>;
+  findAllByProgress(inProgress: boolean): Promise<IMatch[]>;
+  create(match: IMatchCreate): Promise<IMatch>;
   updateProgress(id: number): Promise<void>;
   updateGoals(id: number, goals: IMatchGoals): Promise<void>;
 }

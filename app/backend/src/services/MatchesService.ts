@@ -1,7 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 
-import IMatchService from '../interfaces/IMatchService';
 import IMatch from '../interfaces/IMatch';
+import IMatchService from '../interfaces/IMatchService';
+import IMatchGoals from '../interfaces/IMatchGoals';
+import IMatchCreate from '../interfaces/IMatchCreate';
 
 import HttpException from '../helpers/HttpException';
 
@@ -14,7 +16,7 @@ export default class MatchesService implements IMatchService {
     private teamsModel: typeof Teams,
   ) {}
 
-  public async findAll(): Promise<Matches[]> {
+  public async findAll(): Promise<IMatch[]> {
     const matches = await this.model.findAll({
       include: [
         { model: Teams, as: 'teamHome', attributes: ['teamName'] },
@@ -25,7 +27,7 @@ export default class MatchesService implements IMatchService {
     return matches;
   }
 
-  public async findAllByProgress(inProgress: boolean): Promise<Matches[]> {
+  public async findAllByProgress(inProgress: boolean): Promise<IMatch[]> {
     const matches = await this.model.findAll({
       where: { inProgress },
       include: [
@@ -37,8 +39,11 @@ export default class MatchesService implements IMatchService {
     return matches;
   }
 
-  private static verifyEqualTeams(homeTeam: number, awayTeam: number): void {
-    if (homeTeam === awayTeam) {
+  private static verifyEqualTeams(
+    homeTeamId: number,
+    awayTeamId: number,
+  ): void {
+    if (homeTeamId === awayTeamId) {
       throw new HttpException(
         StatusCodes.UNPROCESSABLE_ENTITY,
         'It is not possible to create a match with two equal teams',
@@ -56,9 +61,7 @@ export default class MatchesService implements IMatchService {
     }
   }
 
-  public async create(
-    match: Omit<Matches, 'id' | 'inProgress'>,
-  ): Promise<Matches> {
+  public async create(match: IMatchCreate): Promise<IMatch> {
     MatchesService.verifyEqualTeams(match.homeTeam, match.awayTeam);
 
     await this.verifyExistTeam(match.homeTeam);
@@ -76,7 +79,7 @@ export default class MatchesService implements IMatchService {
     await this.model.update({ inProgress: false }, { where: { id } });
   }
 
-  public async updateGoals(id: number, goals: IMatch): Promise<void> {
+  public async updateGoals(id: number, goals: IMatchGoals): Promise<void> {
     const { homeTeamGoals, awayTeamGoals } = goals;
 
     await this.model.update(
