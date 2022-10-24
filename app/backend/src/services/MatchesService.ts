@@ -17,7 +17,7 @@ export default class MatchesService implements IMatchService {
     return matches;
   }
 
-  public async findAllInProgress(inProgress: boolean): Promise<Matches[]> {
+  public async findAllByProgress(inProgress: boolean): Promise<Matches[]> {
     const matches = await this.model.findAll({
       where: { inProgress },
       include: [

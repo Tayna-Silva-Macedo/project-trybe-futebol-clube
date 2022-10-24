@@ -9,9 +9,9 @@ export default class MatchesController {
     const { inProgress } = req.query;
 
     if (inProgress) {
-      console.log(inProgress);
       const inProgressBool = inProgress === 'true';
-      matches = await this.service.findAllInProgress(inProgressBool);
+
+      matches = await this.service.findAllByProgress(inProgressBool);
     } else {
       matches = await this.service.findAll();
     }
