@@ -199,4 +199,35 @@ describe('Testes da rota /matches', () => {
       });
     });
   });
+
+  describe('Verifica se só é possível inserir uma partida caso o token seja válido', () => {
+    let response: Response;
+
+    before(async () => {
+      response = await chai
+        .request(app)
+        .post('/matches')
+        .send({
+          homeTeam: 16,
+          awayTeam: 8,
+          homeTeamGoals: 2,
+          awayTeamGoals: 2,
+        })
+        .set('authorization', '123invalid_token456');
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 401', () => {
+      expect(response.status).to.be.equal(401);
+    });
+
+    it('retorna uma mensagem', () => {
+      expect(response.body).to.be.deep.equal({
+        message: 'Token must be a valid token',
+      });
+    });
+  });
 });
