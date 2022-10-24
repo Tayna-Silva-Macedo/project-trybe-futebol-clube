@@ -8,7 +8,7 @@ import { app } from '../app';
 import { Response } from 'superagent';
 import Matches from '../database/models/Matches';
 
-import { findAllMock } from './mocks/matches.mock';
+import { findAllMock, findAllInProgressMock } from './mocks/matches.mock';
 
 chai.use(chaiHttp);
 
@@ -34,6 +34,28 @@ describe('Testes da rota /matches', () => {
 
     it('retorna todas as partidas', () => {
       expect(response.body).to.be.deep.equal(findAllMock);
+    });
+  });
+
+  describe('Verifica se é possível filtrar as partidas em andamento', () => {
+    let response: Response;
+
+    before(async () => {
+      sinon.stub(Matches, 'findAll').resolves(findAllInProgressMock as Matches[]);
+
+      response = await chai.request(app).get('/matches?inProgress=true');
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 200', () => {
+      expect(response.status).to.be.equal(200);
+    });
+
+    it('retorna todas as partidas', () => {
+      expect(response.body).to.be.deep.equal(findAllInProgressMock);
     });
   });
 });

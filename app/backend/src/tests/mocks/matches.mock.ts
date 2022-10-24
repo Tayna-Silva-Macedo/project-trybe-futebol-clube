@@ -42,3 +42,48 @@ export const findAllMock = [
     },
   },
 ];
+
+export const findAllInProgressMock = [
+  {
+    id: 41,
+    homeTeam: 16,
+    homeTeamGoals: 2,
+    awayTeam: 9,
+    awayTeamGoals: 0,
+    inProgress: true,
+    teamHome: {
+      teamName: 'São Paulo',
+    },
+    teamAway: {
+      teamName: 'Internacional',
+    },
+  },
+  {
+    id: 42,
+    homeTeam: 6,
+    homeTeamGoals: 1,
+    awayTeam: 1,
+    awayTeamGoals: 0,
+    inProgress: true,
+    teamHome: {
+      teamName: 'Ferroviária',
+    },
+    teamAway: {
+      teamName: 'Avaí/Kindermann',
+    },
+  },
+  {
+    id: 43,
+    homeTeam: 11,
+    homeTeamGoals: 0,
+    awayTeam: 10,
+    awayTeamGoals: 0,
+    inProgress: true,
+    teamHome: {
+      teamName: 'Napoli-SC',
+    },
+    teamAway: {
+      teamName: 'Minas Brasília',
+    },
+  },
+];
