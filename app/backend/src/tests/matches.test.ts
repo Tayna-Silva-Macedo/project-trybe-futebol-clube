@@ -54,7 +54,7 @@ describe('Testes da rota /matches', () => {
       expect(response.status).to.be.equal(200);
     });
 
-    it('retorna todas as partidas', () => {
+    it('retorna todas as partidas em andamento', () => {
       expect(response.body).to.be.deep.equal(findAllInProgressMock);
     });
   });
