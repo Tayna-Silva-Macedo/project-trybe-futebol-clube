@@ -8,7 +8,12 @@ import { app } from '../app';
 import { Response } from 'superagent';
 import Matches from '../database/models/Matches';
 
-import { findAllMock, findAllInProgressMock, findAllFinishedMock } from './mocks/matches.mock';
+import {
+  findAllMock,
+  findAllInProgressMock,
+  findAllFinishedMock,
+  createdMatchMock,
+} from './mocks/matches.mock';
 
 chai.use(chaiHttp);
 
@@ -41,7 +46,9 @@ describe('Testes da rota /matches', () => {
     let response: Response;
 
     before(async () => {
-      sinon.stub(Matches, 'findAll').resolves(findAllInProgressMock as Matches[]);
+      sinon
+        .stub(Matches, 'findAll')
+        .resolves(findAllInProgressMock as Matches[]);
 
       response = await chai.request(app).get('/matches?inProgress=true');
     });
@@ -65,7 +72,7 @@ describe('Testes da rota /matches', () => {
     before(async () => {
       sinon.stub(Matches, 'findAll').resolves(findAllFinishedMock as Matches[]);
 
-      response = await chai.request(app).get('/matches?inProgress=true');
+      response = await chai.request(app).get('/matches?inProgress=false');
     });
 
     after(() => {
@@ -76,7 +83,34 @@ describe('Testes da rota /matches', () => {
       expect(response.status).to.be.equal(200);
     });
 
-    it('retorna todas as partidas em andamento', () => {
+    it('retorna todas as partidas finalizadas', () => {
+      expect(response.body).to.be.deep.equal(findAllFinishedMock);
+    });
+  });
+
+  describe('Verifica se é possível salvar uma partida com o status de inProgress como true', () => {
+    let response: Response;
+
+    before(async () => {
+      sinon.stub(Matches, 'create').resolves(createdMatchMock as Matches);
+
+      response = await chai.request(app).post('/matches').send({
+        homeTeam: 16,
+        awayTeam: 8,
+        homeTeamGoals: 2,
+        awayTeamGoals: 2,
+      });
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 201', () => {
+      expect(response.status).to.be.equal(201);
+    });
+
+    it('retorna a partida que foi salva', () => {
       expect(response.body).to.be.deep.equal(findAllFinishedMock);
     });
   });
