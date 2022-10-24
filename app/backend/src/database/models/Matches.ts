@@ -1,6 +1,7 @@
 import { Model, INTEGER, BOOLEAN } from 'sequelize';
 import Teams from './Teams';
 import db from '.';
+import ITeam from '../../interfaces/ITeam';
 
 class Matches extends Model {
   id!: number;
@@ -8,7 +9,9 @@ class Matches extends Model {
   homeTeamGoals!: number;
   awayTeam!: number;
   awayTeamGoals!: number;
-  inProgress!: number;
+  inProgress!: boolean;
+  teamHome?: Omit<ITeam, 'id'>;
+  teamAway?: Omit<ITeam, 'id'>;
 }
 
 Matches.init(
