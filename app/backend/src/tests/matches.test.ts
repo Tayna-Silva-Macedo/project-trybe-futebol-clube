@@ -170,8 +170,12 @@ describe('Testes da rota /matches', () => {
     let response: Response;
 
     before(async () => {
-      sinon.stub(Teams, 'findByPk').onFirstCall().resolves(findByIdMock as Teams);
-      sinon.stub(Teams, 'findByPk').onSecondCall().resolves(null);
+      sinon
+        .stub(Teams, 'findByPk')
+        .onFirstCall()
+        .resolves(findByIdMock as Teams)
+        .onSecondCall()
+        .resolves(null);
 
       response = await chai.request(app).post('/matches').send({
         homeTeam: 4,
@@ -191,7 +195,7 @@ describe('Testes da rota /matches', () => {
 
     it('retorna uma mensagem', () => {
       expect(response.body).to.be.deep.equal({
-        message: 'There is no teams with such id!',
+        message: 'There is no team with such id!',
       });
     });
   });
