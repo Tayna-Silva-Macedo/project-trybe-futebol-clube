@@ -32,8 +32,15 @@ export default class MatchesService implements IMatchService {
   public async create(
     match: Omit<Matches, 'id' | 'inProgress'>,
   ): Promise<Matches> {
-    const matchCreated = await this.model.create({ ...match, inProgress: true });
+    const matchCreated = await this.model.create({
+      ...match,
+      inProgress: true,
+    });
 
     return matchCreated;
+  }
+
+  public async update(id: number): Promise<void> {
+    await this.model.update({ inProgress: false }, { where: { id } });
   }
 }

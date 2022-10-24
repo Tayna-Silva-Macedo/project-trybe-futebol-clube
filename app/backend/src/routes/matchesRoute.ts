@@ -13,4 +13,6 @@ router.get('/', matchesController.findAll);
 
 router.post('/', matchesController.create);
 
+router.patch('/:id/finish', matchesController.update);
+
 export default router;
