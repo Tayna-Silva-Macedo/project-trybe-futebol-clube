@@ -28,4 +28,12 @@ export default class MatchesService implements IMatchService {
 
     return matches;
   }
+
+  public async create(
+    match: Omit<Matches, 'id' | 'inProgress'>,
+  ): Promise<Matches> {
+    const matchCreated = await this.model.create({ ...match, inProgress: true });
+
+    return matchCreated;
+  }
 }

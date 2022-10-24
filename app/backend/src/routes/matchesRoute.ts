@@ -11,4 +11,6 @@ const matchesController = new MatchesController(matchesService);
 
 router.get('/', matchesController.findAll);
 
+router.post('/', matchesController.create);
+
 export default router;

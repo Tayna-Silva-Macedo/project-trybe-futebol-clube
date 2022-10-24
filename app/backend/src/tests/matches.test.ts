@@ -111,7 +111,7 @@ describe('Testes da rota /matches', () => {
     });
 
     it('retorna a partida que foi salva', () => {
-      expect(response.body).to.be.deep.equal(findAllFinishedMock);
+      expect(response.body).to.be.deep.equal(createdMatchMock);
     });
   });
 });
