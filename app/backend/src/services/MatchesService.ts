@@ -1,4 +1,7 @@
+import { StatusCodes } from 'http-status-codes';
 import IMatchService from '../interfaces/IMatchService';
+
+import HttpException from '../helpers/HttpException';
 
 import Matches from '../database/models/Matches';
 import Teams from '../database/models/Teams';
@@ -32,6 +35,13 @@ export default class MatchesService implements IMatchService {
   public async create(
     match: Omit<Matches, 'id' | 'inProgress'>,
   ): Promise<Matches> {
+    if (match.homeTeam === match.awayTeam) {
+      throw new HttpException(
+        StatusCodes.UNPROCESSABLE_ENTITY,
+        'It is not possible to create a match with two equal teams',
+      );
+    }
+
     const matchCreated = await this.model.create({
       ...match,
       inProgress: true,

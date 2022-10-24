@@ -154,7 +154,7 @@ describe('Testes da rota /matches', () => {
     });
 
     it('retorna status 422', () => {
-      expect(response.status).to.be.equal(200);
+      expect(response.status).to.be.equal(422);
     });
 
     it('retorna uma mensagem', () => {
