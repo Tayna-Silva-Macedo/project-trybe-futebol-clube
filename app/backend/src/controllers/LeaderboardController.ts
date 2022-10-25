@@ -15,4 +15,10 @@ export default class LeaderboardController {
 
     return res.status(200).json(awayLeaderboard);
   };
+
+  public findAll = async (_req: Request, res: Response) => {
+    const leaderboard = await this.service.generateLeaderboard();
+
+    return res.status(200).json(leaderboard);
+  };
 }

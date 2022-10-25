@@ -62,4 +62,20 @@ export default class LeaderboardService implements ILeaderboardService {
 
     return sortedAwayLeaderboard;
   }
+
+  public async generateLeaderboard(): Promise<ILeaderboard[]> {
+    const teams = await this.teamsModel.findAll();
+    const matches = await this.matchesModel.findAll({
+      where: { inProgress: false },
+    });
+
+    const leaderboard = teams.map((team) => ({
+      name: team.teamName,
+      ...generateLeaderboard(matches, team.id),
+    }));
+
+    const sortedLeaderboard = LeaderboardService.sortLeaderboard(leaderboard);
+
+    return sortedLeaderboard;
+  }
 }
