@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 
-import IUserService from '../interfaces/IUserService';
+import IUserService from '../interfaces/services/IUserService';
 import IUser from '../interfaces/IUser';
 
 import HttpException from '../helpers/HttpException';

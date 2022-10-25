@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 
 import IMatch from '../interfaces/IMatch';
-import IMatchService from '../interfaces/IMatchService';
+import IMatchService from '../interfaces/services/IMatchService';
 import IMatchGoals from '../interfaces/IMatchGoals';
 import IMatchCreate from '../interfaces/IMatchCreate';
 

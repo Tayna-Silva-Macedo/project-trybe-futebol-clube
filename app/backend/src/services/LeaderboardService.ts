@@ -1,4 +1,4 @@
-import ILeaderboardService from '../interfaces/ILeaderboardService';
+import ILeaderboardService from '../interfaces/services/ILeaderboardService';
 import ILeaderboard from '../interfaces/ILeaderboard';
 
 import Matches from '../database/models/Matches';

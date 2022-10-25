@@ -1,5 +1,5 @@
 import { StatusCodes } from 'http-status-codes';
-import ITeamService from '../interfaces/ITeamService';
+import ITeamService from '../interfaces/services/ITeamService';
 import ITeam from '../interfaces/ITeam';
 
 import HttpException from '../helpers/HttpException';

@@ -1,6 +1,6 @@
-import IMatch from './IMatch';
-import IMatchCreate from './IMatchCreate';
-import IMatchGoals from './IMatchGoals';
+import IMatch from '../IMatch';
+import IMatchCreate from '../IMatchCreate';
+import IMatchGoals from '../IMatchGoals';
 
 export default interface IMatchService {
   findAll(): Promise<IMatch[]>;

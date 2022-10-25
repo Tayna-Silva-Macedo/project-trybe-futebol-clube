@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import IUserService from '../interfaces/IUserService';
+import IUserService from '../interfaces/services/IUserService';
 
 export default class UsersController {
   constructor(private service: IUserService) {}

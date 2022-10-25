@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import ILeaderboardService from '../interfaces/ILeaderboardService';
+import ILeaderboardService from '../interfaces/services/ILeaderboardService';
 
 export default class LeaderboardController {
   constructor(private service: ILeaderboardService) {}

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import ITeamService from '../interfaces/ITeamService';
+import ITeamService from '../interfaces/services/ITeamService';
 
 export default class TeamsController {
   constructor(private service: ITeamService) {}
