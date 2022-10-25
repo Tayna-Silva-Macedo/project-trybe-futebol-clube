@@ -12,7 +12,11 @@ import Teams from '../database/models/Teams';
 
 import { findAllTeamsMock } from './mocks/teams.mock';
 import { findAllMatchesFinishedMock } from './mocks/matches.mock';
-import { leaderboardHomeResult, leaderboardAwayResult } from './mocks/leaderboard.mock';
+import {
+  leaderboardHomeResult,
+  leaderboardAwayResult,
+  leaderboardResult,
+} from './mocks/leaderboard.mock';
 
 chai.use(chaiHttp);
 
@@ -24,7 +28,9 @@ describe('Testes da rota /leaderboard', () => {
 
     before(async () => {
       sinon.stub(Teams, 'findAll').resolves(findAllTeamsMock as Teams[]);
-      sinon.stub(Matches, 'findAll').resolves(findAllMatchesFinishedMock as Matches[]);
+      sinon
+        .stub(Matches, 'findAll')
+        .resolves(findAllMatchesFinishedMock as Matches[]);
 
       response = await chai.request(app).get('/leaderboard/home');
     });
@@ -47,7 +53,9 @@ describe('Testes da rota /leaderboard', () => {
 
     before(async () => {
       sinon.stub(Teams, 'findAll').resolves(findAllTeamsMock as Teams[]);
-      sinon.stub(Matches, 'findAll').resolves(findAllMatchesFinishedMock as Matches[]);
+      sinon
+        .stub(Matches, 'findAll')
+        .resolves(findAllMatchesFinishedMock as Matches[]);
 
       response = await chai.request(app).get('/leaderboard/away');
     });
@@ -62,6 +70,31 @@ describe('Testes da rota /leaderboard', () => {
 
     it('retorna as classificações corretamente', () => {
       expect(response.body).to.be.deep.equal(leaderboardAwayResult);
+    });
+  });
+
+  describe('Verifica se retorna as classificações gerais dos times corretamente ao acessar /', () => {
+    let response: Response;
+
+    before(async () => {
+      sinon.stub(Teams, 'findAll').resolves(findAllTeamsMock as Teams[]);
+      sinon
+        .stub(Matches, 'findAll')
+        .resolves(findAllMatchesFinishedMock as Matches[]);
+
+      response = await chai.request(app).get('/leaderboard');
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('retorna status 200', () => {
+      expect(response.status).to.be.equal(200);
+    });
+
+    it('retorna as classificações corretamente', () => {
+      expect(response.body).to.be.deep.equal(leaderboardResult);
     });
   });
 });
