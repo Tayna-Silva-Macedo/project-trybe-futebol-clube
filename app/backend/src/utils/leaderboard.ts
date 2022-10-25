@@ -110,7 +110,7 @@ const calculateGoalsOwn = (matches: IMatch[], teamId: number): number => {
   return goalsOwn;
 };
 
-const calculateEfficiency = (matches: IMatch[], teamId: number): number => {
+const calculateEfficiency = (matches: IMatch[], teamId: number): string => {
   const totalVictories = calculateVictories(matches, teamId);
   const totalDraws = calculateDraws(matches, teamId);
   const totalPoints = totalVictories * 3 + totalDraws * 1;
@@ -118,7 +118,7 @@ const calculateEfficiency = (matches: IMatch[], teamId: number): number => {
 
   const efficiency = (totalPoints / (totalGames * 3)) * 100;
 
-  return Number(efficiency.toFixed(2));
+  return efficiency.toFixed(2);
 };
 
 const generateLeaderboard = (matches: IMatch[], teamId: number) => {
