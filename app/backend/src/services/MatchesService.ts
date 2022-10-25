@@ -1,23 +1,23 @@
 import { StatusCodes } from 'http-status-codes';
 
-import IMatch from '../interfaces/IMatch';
 import IMatchService from '../interfaces/services/IMatchService';
+import IMatch from '../interfaces/IMatch';
 import IMatchGoals from '../interfaces/IMatchGoals';
 import IMatchCreate from '../interfaces/IMatchCreate';
-
-import HttpException from '../helpers/HttpException';
 
 import Matches from '../database/models/Matches';
 import Teams from '../database/models/Teams';
 
+import HttpException from '../helpers/HttpException';
+
 export default class MatchesService implements IMatchService {
   constructor(
-    private model: typeof Matches,
+    private matchesModel: typeof Matches,
     private teamsModel: typeof Teams,
   ) {}
 
   public async findAll(): Promise<IMatch[]> {
-    const matches = await this.model.findAll({
+    const matches = await this.matchesModel.findAll({
       include: [
         { model: Teams, as: 'teamHome', attributes: ['teamName'] },
         { model: Teams, as: 'teamAway', attributes: ['teamName'] },
@@ -28,7 +28,7 @@ export default class MatchesService implements IMatchService {
   }
 
   public async findAllByProgress(inProgress: boolean): Promise<IMatch[]> {
-    const matches = await this.model.findAll({
+    const matches = await this.matchesModel.findAll({
       where: { inProgress },
       include: [
         { model: Teams, as: 'teamHome', attributes: ['teamName'] },
@@ -39,10 +39,7 @@ export default class MatchesService implements IMatchService {
     return matches;
   }
 
-  private static verifyEqualTeams(
-    homeTeamId: number,
-    awayTeamId: number,
-  ): void {
+  private static verifyEqualTeams(homeTeamId: number, awayTeamId: number): void {
     if (homeTeamId === awayTeamId) {
       throw new HttpException(
         StatusCodes.UNPROCESSABLE_ENTITY,
@@ -53,6 +50,7 @@ export default class MatchesService implements IMatchService {
 
   private async verifyExistTeam(teamId: number): Promise<void> {
     const team = await this.teamsModel.findByPk(teamId);
+
     if (!team) {
       throw new HttpException(
         StatusCodes.NOT_FOUND,
@@ -67,7 +65,7 @@ export default class MatchesService implements IMatchService {
     await this.verifyExistTeam(match.homeTeam);
     await this.verifyExistTeam(match.awayTeam);
 
-    const matchCreated = await this.model.create({
+    const matchCreated = await this.matchesModel.create({
       ...match,
       inProgress: true,
     });
@@ -76,13 +74,13 @@ export default class MatchesService implements IMatchService {
   }
 
   public async updateProgress(id: number): Promise<void> {
-    await this.model.update({ inProgress: false }, { where: { id } });
+    await this.matchesModel.update({ inProgress: false }, { where: { id } });
   }
 
   public async updateGoals(id: number, goals: IMatchGoals): Promise<void> {
     const { homeTeamGoals, awayTeamGoals } = goals;
 
-    await this.model.update(
+    await this.matchesModel.update(
       { homeTeamGoals, awayTeamGoals },
       { where: { id } },
     );

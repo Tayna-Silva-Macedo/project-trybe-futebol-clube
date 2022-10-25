@@ -3,17 +3,17 @@ import { StatusCodes } from 'http-status-codes';
 import IUserService from '../interfaces/services/IUserService';
 import IUser from '../interfaces/IUser';
 
+import Users from '../database/models/Users';
+
 import HttpException from '../helpers/HttpException';
 import Token from '../helpers/Token';
 import Bcrypt from '../helpers/Bcryptjs';
 
-import Users from '../database/models/Users';
-
 export default class UsersService implements IUserService {
-  constructor(private model: typeof Users) {}
+  constructor(private usersModel: typeof Users) {}
 
   public async findByEmail(email: string): Promise<IUser | null> {
-    const user = await this.model.findOne({ where: { email } });
+    const user = await this.usersModel.findOne({ where: { email } });
 
     return user;
   }

@@ -25,11 +25,17 @@ export default class LeaderboardService implements ILeaderboardService {
     return leaderboard;
   }
 
-  public async generateHomeLeaderboard(): Promise<ILeaderboard[]> {
+  private async findAllTeamsAndFinishedMatches() {
     const teams = await this.teamsModel.findAll();
     const matches = await this.matchesModel.findAll({
       where: { inProgress: false },
     });
+
+    return { teams, matches };
+  }
+
+  public async generateHomeLeaderboard(): Promise<ILeaderboard[]> {
+    const { teams, matches } = await this.findAllTeamsAndFinishedMatches();
 
     const homeLeaderboard = teams.map((team) => {
       const homeMatches = matches.filter((match) => match.homeTeam === team.id);
@@ -45,10 +51,7 @@ export default class LeaderboardService implements ILeaderboardService {
   }
 
   public async generateAwayLeaderboard(): Promise<ILeaderboard[]> {
-    const teams = await this.teamsModel.findAll();
-    const matches = await this.matchesModel.findAll({
-      where: { inProgress: false },
-    });
+    const { teams, matches } = await this.findAllTeamsAndFinishedMatches();
 
     const awayLeaderboard = teams.map((team) => {
       const awayMatches = matches.filter((match) => match.awayTeam === team.id);
@@ -64,10 +67,7 @@ export default class LeaderboardService implements ILeaderboardService {
   }
 
   public async generateLeaderboard(): Promise<ILeaderboard[]> {
-    const teams = await this.teamsModel.findAll();
-    const matches = await this.matchesModel.findAll({
-      where: { inProgress: false },
-    });
+    const { teams, matches } = await this.findAllTeamsAndFinishedMatches();
 
     const leaderboard = teams.map((team) => ({
       name: team.teamName,
