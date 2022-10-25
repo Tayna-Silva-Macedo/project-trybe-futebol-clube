@@ -65,6 +65,16 @@ export const findAllTeamsMock = [
   },
 ];
 
+export const findByPk8Mock = {
+  id: 8,
+  teamName: 'Grêmio',
+};
+
+export const findByPk16Mock = {
+  id: 16,
+  teamName: 'São Paulo',
+};
+
 export const findTeamByIdMock = {
   id: 4,
   teamName: 'Corinthians',
