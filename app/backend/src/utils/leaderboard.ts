@@ -66,6 +66,15 @@ const calculateLosses = (matches: IMatch[], teamId: number) => {
   return losses;
 };
 
+const calculatePoints = (matches: IMatch[], teamId: number): number => {
+  const totalVictories = calculateVictories(matches, teamId);
+  const totalDraws = calculateDraws(matches, teamId);
+
+  const points = totalVictories * 3 + totalDraws * 1;
+
+  return points;
+};
+
 const calculateGames = (matches: IMatch[], teamId: number): number => {
   const games = matches.reduce((acc, match) => {
     if (match.homeTeam === teamId || match.awayTeam === teamId) {
@@ -110,10 +119,17 @@ const calculateGoalsOwn = (matches: IMatch[], teamId: number): number => {
   return goalsOwn;
 };
 
+const calculateGolsBalance = (matches: IMatch[], teamId: number): number => {
+  const goalsFavor = calculateGoalsFavor(matches, teamId);
+  const goalsOwn = calculateGoalsOwn(matches, teamId);
+
+  const golsBalance = goalsFavor - goalsOwn;
+
+  return golsBalance;
+};
+
 const calculateEfficiency = (matches: IMatch[], teamId: number): string => {
-  const totalVictories = calculateVictories(matches, teamId);
-  const totalDraws = calculateDraws(matches, teamId);
-  const totalPoints = totalVictories * 3 + totalDraws * 1;
+  const totalPoints = calculatePoints(matches, teamId);
   const totalGames = calculateGames(matches, teamId);
 
   const efficiency = (totalPoints / (totalGames * 3)) * 100;
@@ -121,26 +137,16 @@ const calculateEfficiency = (matches: IMatch[], teamId: number): string => {
   return efficiency.toFixed(2);
 };
 
-const generateLeaderboard = (matches: IMatch[], teamId: number) => {
-  const totalVictories = calculateVictories(matches, teamId);
-  const totalDraws = calculateDraws(matches, teamId);
-  const totalGames = calculateGames(matches, teamId);
-  const totalLosses = calculateLosses(matches, teamId);
-  const goalsFavor = calculateGoalsFavor(matches, teamId);
-  const goalsOwn = calculateGoalsOwn(matches, teamId);
-  const efficiency = calculateEfficiency(matches, teamId);
-
-  return {
-    totalPoints: totalVictories * 3 + totalDraws * 1,
-    totalGames,
-    totalVictories,
-    totalDraws,
-    totalLosses,
-    goalsFavor,
-    goalsOwn,
-    goalsBalance: goalsFavor - goalsOwn,
-    efficiency,
-  };
-};
+const generateLeaderboard = (matches: IMatch[], teamId: number) => ({
+  totalPoints: calculatePoints(matches, teamId),
+  totalGames: calculateGames(matches, teamId),
+  totalVictories: calculateVictories(matches, teamId),
+  totalDraws: calculateDraws(matches, teamId),
+  totalLosses: calculateLosses(matches, teamId),
+  goalsFavor: calculateGoalsFavor(matches, teamId),
+  goalsOwn: calculateGoalsOwn(matches, teamId),
+  goalsBalance: calculateGolsBalance(matches, teamId),
+  efficiency: calculateEfficiency(matches, teamId),
+});
 
 export default generateLeaderboard;
