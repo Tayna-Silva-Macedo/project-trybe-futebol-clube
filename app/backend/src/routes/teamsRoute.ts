@@ -1,13 +1,8 @@
 import { Router } from 'express';
 
-import Teams from '../database/models/Teams';
-import TeamsService from '../services/TeamsService';
-import TeamsController from '../controllers/TeamsController';
+import teamsController from '../utils/instances/teamsController';
 
 const router = Router();
-
-const teamsService = new TeamsService(Teams);
-const teamsController = new TeamsController(teamsService);
 
 router.get('/', teamsController.findAll);
 router.get('/:id', teamsController.findById);
