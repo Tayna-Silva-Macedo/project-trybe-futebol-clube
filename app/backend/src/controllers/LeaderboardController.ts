@@ -9,4 +9,10 @@ export default class LeaderboardController {
 
     return res.status(200).json(homeLeaderboard);
   };
+
+  public findAllAway = async (_req: Request, res: Response) => {
+    const awayLeaderboard = await this.service.generateAwayLeaderboard();
+
+    return res.status(200).json(awayLeaderboard);
+  };
 }
