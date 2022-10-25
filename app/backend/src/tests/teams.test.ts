@@ -8,7 +8,7 @@ import { app } from '../app';
 import { Response } from 'superagent';
 import Teams from '../database/models/Teams';
 
-import { findAllMock, findByIdMock } from './mocks/teams.mock';
+import { findAllTeamsMock, findTeamByIdMock } from './mocks/teams.mock';
 
 chai.use(chaiHttp);
 
@@ -19,7 +19,7 @@ describe('Testes da rota /teams', () => {
     let response: Response;
 
     before(async () => {
-      sinon.stub(Teams, 'findAll').resolves(findAllMock as Teams[]);
+      sinon.stub(Teams, 'findAll').resolves(findAllTeamsMock as Teams[]);
 
       response = await chai.request(app).get('/teams');
     });
@@ -33,7 +33,7 @@ describe('Testes da rota /teams', () => {
     });
 
     it('retorna todos os times', () => {
-      expect(response.body).to.be.deep.equal(findAllMock);
+      expect(response.body).to.be.deep.equal(findAllTeamsMock);
     });
   });
 
@@ -41,7 +41,7 @@ describe('Testes da rota /teams', () => {
     let response: Response;
 
     before(async () => {
-      sinon.stub(Teams, 'findByPk').resolves(findByIdMock as Teams);
+      sinon.stub(Teams, 'findByPk').resolves(findTeamByIdMock as Teams);
 
       response = await chai.request(app).get('/teams/4');
     });
@@ -55,7 +55,7 @@ describe('Testes da rota /teams', () => {
     });
 
     it('retorna o time de id 4', () => {
-      expect(response.body).to.be.deep.equal(findByIdMock);
+      expect(response.body).to.be.deep.equal(findTeamByIdMock);
     });
   });
 
