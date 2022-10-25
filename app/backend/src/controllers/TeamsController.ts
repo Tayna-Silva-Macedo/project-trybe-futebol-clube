@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+
 import ITeamService from '../interfaces/ITeamService';
 
 export default class TeamsController {
@@ -7,7 +9,7 @@ export default class TeamsController {
   public findAll = async (_req: Request, res: Response) => {
     const teams = await this.service.findAll();
 
-    return res.status(200).json(teams);
+    return res.status(StatusCodes.OK).json(teams);
   };
 
   public findById = async (req: Request, res: Response) => {
@@ -15,6 +17,6 @@ export default class TeamsController {
 
     const team = await this.service.findById(id);
 
-    return res.status(200).json(team);
+    return res.status(StatusCodes.OK).json(team);
   };
 }

@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+
 import IMatchService from '../interfaces/IMatchService';
 
 export default class MatchesController {
@@ -16,7 +18,7 @@ export default class MatchesController {
       matches = await this.service.findAll();
     }
 
-    return res.status(200).json(matches);
+    return res.status(StatusCodes.OK).json(matches);
   };
 
   public create = async (req: Request, res: Response) => {
@@ -24,7 +26,7 @@ export default class MatchesController {
 
     const matchCreated = await this.service.create(match);
 
-    return res.status(201).json(matchCreated);
+    return res.status(StatusCodes.CREATED).json(matchCreated);
   };
 
   public updateProgress = async (req: Request, res: Response) => {
@@ -32,7 +34,7 @@ export default class MatchesController {
 
     await this.service.updateProgress(id);
 
-    return res.status(200).json({ message: 'Finished' });
+    return res.status(StatusCodes.OK).json({ message: 'Finished' });
   };
 
   public updateGoals = async (req: Request, res: Response) => {
@@ -41,6 +43,6 @@ export default class MatchesController {
 
     await this.service.updateGoals(id, goals);
 
-    return res.status(200).json({ message: 'Match updated!' });
+    return res.status(StatusCodes.OK).json({ message: 'Match updated!' });
   };
 }

@@ -17,6 +17,6 @@ export default class UsersController {
   public getRole = async (_req: Request, res: Response) => {
     const { role } = res.locals;
 
-    return res.status(200).json({ role });
+    return res.status(StatusCodes.OK).json({ role });
   };
 }
