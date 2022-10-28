@@ -55,7 +55,7 @@ npm run compose:up
 
 > ℹ️ Ao subir a aplicação, o serviço de Front-end estará rodando na port 3000 da sua máquina, o Back-end estará rodando na porta 3001 e o banco de dados MySQL estará rodando na porta 3002.
 
-4. Para rodar os testes de integração e verificar a sua cobertura é utilizado os seguintes comandos:
+4. Para rodar os testes de integração e verificar a sua cobertura são utilizados os seguintes comandos:
 
 ```
 cd app/backend
