@@ -4,6 +4,8 @@ Este é um projeto da [Trybe](https://www.betrybe.com/) que foi desenvolvido no 
 O TFC é um site informativo sobre partidas e classificações de futebol. Nele foi desenvolvida uma API utilizando o método ***TDD*** (Test Driven Development) e feita a sua integração com um front-end (já estruturado) e com um banco de dados ***MySQL***.
 Neste projeto buscou-se seguir todas as diretrizes dos princípios ***SOLID*** e do paradigma de programação ***POO*** (Programação orientada a objetos).
 
+![login-page-tfc](https://user-images.githubusercontent.com/99992183/198701078-08f1a3b1-a340-4db4-831f-8698415d0034.png)
+
 ## Tecnologias utilizadas
 
 Em seu desenvolvimento foi utilizada linguagem ***TypeScript*** para escrever os códigos e ***Node.js*** juntamente com o framework ***Express*** para fornecer toda a estrutura que possibilitou a construção dos endpoints da aplicação. 
